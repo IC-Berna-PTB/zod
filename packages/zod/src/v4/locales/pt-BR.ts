@@ -134,7 +134,7 @@ const error: () => errors.$ZodErrorMap = () => {
         return `Formato d${FormatDictionary[_issue.format] ?? issue.format} inválido`;
       }
       case "not_multiple_of":
-        return `Número inválido: dever ser múltiplo de ${issue.divisor}`;
+        return `Número inválido: deve ser múltiplo de ${issue.divisor}`;
       case "unrecognized_keys": {
         const plural = issue.keys.length > 1 ? "s" : "";
         return `Chave${plural} inválida${plural}: ${util.joinValues(issue.keys, ", ")}`;
