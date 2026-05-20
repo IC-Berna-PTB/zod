@@ -57,11 +57,9 @@ const error: () => errors.$ZodErrorMap = () => {
     feminine: { definite: "a", indefinite: "uma" },
   };
 
-  // type names: missing keys = do not translate (use raw value via ?? fallback)
   const TypeDictionary: {
     [k in errors.$ZodInvalidTypeExpected | (string & {})]?: { name: string; articles: Articles };
   } = {
-    // Compatibility: "nan" -> "NaN" for display
     string: { name: "texto", articles: Gender.masculine },
     number: { name: "número", articles: Gender.masculine },
     int: { name: "número inteiro", articles: Gender.masculine },
@@ -81,10 +79,8 @@ const error: () => errors.$ZodErrorMap = () => {
     set: { name: "conjunto", articles: Gender.masculine },
     file: { name: "arquivo", articles: Gender.masculine },
     nonoptional: { name: "valor não opcional", articles: Gender.masculine },
-    nan: { name: 'valor "NaN"', articles: Gender.masculine },
+    nan: { name: 'valor "NaN"', articles: Gender.masculine }, // Compatibility: "nan" -> "NaN" for display
     function: { name: "função", articles: Gender.feminine },
-
-    // All other type names omitted - they fall back to raw values via ?? operator
   };
 
   function translateOriginWithArticle(
