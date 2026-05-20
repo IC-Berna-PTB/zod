@@ -1,10 +1,10 @@
 import type { $ZodStringFormats } from "../core/checks.js";
 import type * as errors from "../core/errors.js";
+import type { $ZodInvalidTypeExpected } from "../core/errors.js";
 import * as util from "../core/util.js";
-import {$ZodInvalidTypeExpected} from "../core/errors.js";
 
 const error: () => errors.$ZodErrorMap = () => {
-  const Sizable: Record<string, { unit: string; }> = {
+  const Sizable: Record<string, { unit: string }> = {
     string: { unit: "caracteres" },
     file: { unit: "bytes" },
     array: { unit: "elementos" },
@@ -50,47 +50,48 @@ const error: () => errors.$ZodErrorMap = () => {
     template_literal: "a entrada",
   };
 
-  type Articles = {definite: string, indefinite: string};
+  type Articles = { definite: string; indefinite: string };
 
-  const Gender: {[k in "masculine" | "feminine"]: Articles } =
-    {
-    masculine: {definite: "o", indefinite: "um"},
-    feminine: {definite: "a", indefinite: "uma"}
-  }
+  const Gender: { [k in "masculine" | "feminine"]: Articles } = {
+    masculine: { definite: "o", indefinite: "um" },
+    feminine: { definite: "a", indefinite: "uma" },
+  };
 
   // type names: missing keys = do not translate (use raw value via ?? fallback)
   const TypeDictionary: {
-    [k in errors.$ZodInvalidTypeExpected | (string & {})]?: {name: string, articles: Articles};
+    [k in errors.$ZodInvalidTypeExpected | (string & {})]?: { name: string; articles: Articles };
   } = {
     // Compatibility: "nan" -> "NaN" for display
-    string: {name: "texto", articles: Gender.masculine},
-    number: {name: "número", articles: Gender.masculine},
-    int: {name: "número inteiro", articles: Gender.masculine},
-    boolean: {name: "valor booleano", articles: Gender.masculine},
-    bigint: {name: "número bigint", articles: Gender.masculine},
-    symbol: {name: "símbolo", articles: Gender.masculine},
-    undefined: {name: "valor \"undefined\"", articles: Gender.masculine},
-    null: {name: "valor \"nulo\"", articles: Gender.masculine},
-    never: {name: "valor \"never\"", articles: Gender.masculine},
-    void: {name: "valor \"void\"", articles: Gender.masculine},
-    date: {name: "data", articles: Gender.feminine},
-    array: {name: "vetor", articles: Gender.masculine},
-    object: {name: "objeto", articles: Gender.masculine},
-    tuple: {name: "tuple", articles: Gender.feminine},
-    record: {name: "registro", articles: Gender.masculine},
-    map: {name: "mapa", articles: Gender.masculine},
-    set: {name: "conjunto", articles: Gender.masculine},
-    file: {name: "arquivo", articles: Gender.masculine},
-    nonoptional: {name: "valor não opcional", articles: Gender.masculine},
-    nan: {name: "valor \"NaN\"",  articles: Gender.masculine},
-    function: {name: "função", articles: Gender.feminine},
-
+    string: { name: "texto", articles: Gender.masculine },
+    number: { name: "número", articles: Gender.masculine },
+    int: { name: "número inteiro", articles: Gender.masculine },
+    boolean: { name: "valor booleano", articles: Gender.masculine },
+    bigint: { name: "número bigint", articles: Gender.masculine },
+    symbol: { name: "símbolo", articles: Gender.masculine },
+    undefined: { name: 'valor "undefined"', articles: Gender.masculine },
+    null: { name: 'valor "nulo"', articles: Gender.masculine },
+    never: { name: 'valor "never"', articles: Gender.masculine },
+    void: { name: 'valor "void"', articles: Gender.masculine },
+    date: { name: "data", articles: Gender.feminine },
+    array: { name: "vetor", articles: Gender.masculine },
+    object: { name: "objeto", articles: Gender.masculine },
+    tuple: { name: "tuple", articles: Gender.feminine },
+    record: { name: "registro", articles: Gender.masculine },
+    map: { name: "mapa", articles: Gender.masculine },
+    set: { name: "conjunto", articles: Gender.masculine },
+    file: { name: "arquivo", articles: Gender.masculine },
+    nonoptional: { name: "valor não opcional", articles: Gender.masculine },
+    nan: { name: 'valor "NaN"', articles: Gender.masculine },
+    function: { name: "função", articles: Gender.feminine },
 
     // All other type names omitted - they fall back to raw values via ?? operator
   };
 
-  function translateOriginWithArticle(type: $ZodInvalidTypeExpected | (string & {}), articleType: "definite" | "indefinite"): string {
-    const translatedValue = TypeDictionary[type] ?? {name: `valor "${type}"`, articles: Gender.masculine};
+  function translateOriginWithArticle(
+    type: $ZodInvalidTypeExpected | (string & {}),
+    articleType: "definite" | "indefinite"
+  ): string {
+    const translatedValue = TypeDictionary[type] ?? { name: `valor "${type}"`, articles: Gender.masculine };
     return `${translatedValue.articles[articleType]} ${translatedValue.name}`;
   }
 
@@ -134,9 +135,10 @@ const error: () => errors.$ZodErrorMap = () => {
       }
       case "not_multiple_of":
         return `Número inválido: dever ser múltiplo de ${issue.divisor}`;
-      case "unrecognized_keys":
-        let plural = issue.keys.length > 1 ? "s" : "";
+      case "unrecognized_keys": {
+        const plural = issue.keys.length > 1 ? "s" : "";
         return `Chave${plural} inválida${plural}: ${util.joinValues(issue.keys, ", ")}`;
+      }
       case "invalid_key":
         return `Entrada inválida n${translateOriginWithArticle(issue.origin, "definite")}`;
       case "invalid_union":
