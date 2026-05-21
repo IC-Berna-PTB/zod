@@ -73,7 +73,7 @@ const error: () => errors.$ZodErrorMap = () => {
     date: { name: "data", articles: Gender.feminine },
     array: { name: "vetor", articles: Gender.masculine },
     object: { name: "objeto", articles: Gender.masculine },
-    tuple: { name: "tuple", articles: Gender.feminine },
+    tuple: { name: "tupla", articles: Gender.feminine },
     record: { name: "registro", articles: Gender.masculine },
     map: { name: "mapa", articles: Gender.masculine },
     set: { name: "conjunto", articles: Gender.masculine },
@@ -121,9 +121,7 @@ const error: () => errors.$ZodErrorMap = () => {
       }
       case "invalid_format": {
         const _issue = issue as errors.$ZodStringFormatIssues;
-        if (_issue.format === "starts_with") {
-          return `Texto inválido: deve começar com "${_issue.prefix}"`;
-        }
+        if (_issue.format === "starts_with") return `Texto inválido: deve começar com "${_issue.prefix}"`;
         if (_issue.format === "ends_with") return `Texto inválido: deve terminar com "${_issue.suffix}"`;
         if (_issue.format === "includes") return `Texto inválido: deve incluir "${_issue.includes}"`;
         if (_issue.format === "regex") return `Texto inválido: deve corresponder ao padrão ${_issue.pattern}`;
