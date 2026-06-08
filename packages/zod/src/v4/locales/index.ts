@@ -36,6 +36,7 @@ export { default as ps } from "./ps.js";
 export { default as pl } from "./pl.js";
 export { default as pt } from "./pt.js";
 export { default as ptBR } from "./pt-BR.js";
+export { default as ptPT } from "./pt-PT.js";
 export { default as ro } from "./ro.js";
 export { default as ru } from "./ru.js";
 export { default as sl } from "./sl.js";
